@@ -7,21 +7,25 @@
 
 import Foundation
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import SKClient
 
 extension MigrationRewriter {
-    private typealias Property = (letVar: String, syntax: SyntaxProtocol)
+    private typealias Property = (letVar: String, hasMainActor: Bool, hasNonisolated: Bool, syntax: SyntaxProtocol)
     private final func property(_ node: DeclGroupSyntax) -> [Property] {
         let properties: [[Property]] = node.memberBlock.members.compactMap { member in
             if let varDecl = member.decl.as(VariableDeclSyntax.self) {
                 let letVar = varDecl.bindingSpecifier.text
+                let hasMainActor = varDecl.hasMainActor
+                let hasNonisolated = varDecl.hasNonisolated
+                varDecl.unexpectedBetweenModifiersAndBindingSpecifier
                 for binding in varDecl.bindings {
                     if let pattern = binding.pattern.as(IdentifierPatternSyntax.self) {
-                        return [(letVar, pattern)]
+                        return [(letVar, hasMainActor, hasNonisolated, pattern)]
                     }
                     if let pattern = binding.pattern.as(TuplePatternSyntax.self) {
                         return pattern.elements.map { tuple in
-                            (letVar, tuple)
+                            (letVar, hasMainActor, hasNonisolated, tuple)
                         }
                     }
                 }
@@ -38,10 +42,14 @@ extension MigrationRewriter {
         }
         
         for property in properties {
+            if (property.hasMainActor || property.hasNonisolated) {
+                continue
+            }
+            
             if (property.letVar == "var") {
                 return false
             }
-            let isSendable = (try? store.isSendable(typeusr(property.syntax))) ?? false
+            let isSendable = store.isSendable(typeusr(property.syntax))
             if (!isSendable) {
                 return false
             }
@@ -52,9 +60,16 @@ extension MigrationRewriter {
     /// AttributeList: [@MainActor]
     /// ModifierList: [public final]
     final func handleExplicitSendable(_ node: StructDeclSyntax) -> StructDeclSyntax {
+        if store.isSendable(usr(node.name)) { return node }
+        
+        print(node.name.text)
         if (isAllPropertiesSendable(node)) {
-            var inheritance = node.inheritanceClause ?? InheritanceClauseSyntax(inheritedTypes: [])
-            inheritance.inheritedTypes.append(Symbols.sendable)
+            let inheritance = InheritanceClauseSyntax {
+                if let origin = node.inheritanceClause {
+                    origin.inheritedTypes
+                }
+                Symbols.sendable
+            }
             let newNode = node.with(\.inheritanceClause, inheritance)
             return newNode
         }
@@ -63,9 +78,18 @@ extension MigrationRewriter {
     }
     
     final func handleExplicitSendable(_ node: ClassDeclSyntax) -> ClassDeclSyntax {
+        if node.hasOpen { return node }
+        if store.haveInheritance(usr(node.name)) { return node }
+        if store.isSendable(usr(node.name)) { return node }
+        if store.isNSObject(usr(node.name)) { return node }
+        
         if (isAllPropertiesSendable(node)) {
-            var inheritance = node.inheritanceClause ?? InheritanceClauseSyntax(inheritedTypes: [])
-            inheritance.inheritedTypes.append(Symbols.sendable)
+            let inheritance = InheritanceClauseSyntax {
+                if let origin = node.inheritanceClause {
+                    origin.inheritedTypes
+                }
+                Symbols.sendable
+            }
             
             var modifiers = node.modifiers
             modifiers.append(Symbols.final)

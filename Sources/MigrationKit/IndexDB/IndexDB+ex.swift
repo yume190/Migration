@@ -31,8 +31,7 @@ extension IndexStore {
         return !comforms.filter { occurrence in
             return
                 occurrence.symbol.name == "Sendable" &&
-                occurrence.symbol.kind == .protocol &&
-                occurrence.location.isSystem
+                occurrence.symbol.kind == .protocol
         }.isEmpty
     }
     
@@ -45,7 +44,46 @@ extension IndexStore {
                 occurrence.symbol.kind == .instanceProperty
             }
     }
+    
+    func all(_ usr: String) -> [SymbolOccurrence] {
+        return db.occurrences(ofUSR: usr, roles: .all)
+    }
+    
+    func allRelated(_ usr: String) -> [SymbolOccurrence] {
+        return db.occurrences(relatedToUSR: usr, roles: .all)
+    }
 }
+
+extension IndexStore {
+    /// Find Parent Class
+    func parent(_ usr: String) -> SymbolOccurrence? {
+        let conforms = comforms(usr).filter { occurence in
+            return occurence.symbol.kind == .class
+        }
+        return conforms.first
+    }
+    
+    func parents(_ usr: String) -> [SymbolOccurrence] {
+        if let parent = parent(usr) {
+            return [parent] + parents(parent.symbol.usr)
+        }
+        return []
+    }
+    
+    func rootParent(_ usr: String) -> SymbolOccurrence? {
+        return parents(usr).last
+    }
+    
+    func isNSObject(_ usr: String) -> Bool {
+        let root = rootParent(usr)
+        return
+            root?.symbol.name == "NSObject" &&
+            root?.symbol.kind == .class
+    }
+}
+
+
+
 /// `occurrences(ofUSR:)`
 extension IndexStore {
     /// [ref|extendedBy]

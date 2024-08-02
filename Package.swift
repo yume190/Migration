@@ -62,6 +62,8 @@ let package = Package(
                 "PathKit",
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+                
                 .product(name: "IndexStoreDB", package: "indexstore-db"),
                 .product(name: "SKClient", package: "TypeFill"),
             ]

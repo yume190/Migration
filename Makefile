@@ -1,7 +1,5 @@
 VERSION = 0.0.8
 
-include CodeQL.mk
-
 .PHONY: updateVersion
 updateVersion:
 	sed -i '' 's|\(version: "\)\(.*\)\("\)|\1$(VERSION)\3|' Sources/Migration/Command.swift
@@ -68,6 +66,11 @@ libDetail: release
 .PHONY: graph
 graph:
 	swift package show-dependencies --format dot | dot -Tsvg -o graph.svg
+
+testRun: 
+	swift run migration \
+		--file /Users/yume/Downloads/swift-migration-guide-main/Package.swift \
+		--module Library
 
 # .PHONY: single
 # single:

@@ -39,14 +39,18 @@ migration \
 ## TODOS
 
 * [ ] Add Explicit `Sendable`
-    * [x] Check all propery is `let`
-    * [x] Check all propery is `Sendable`
-    * [x] Add `final` to `class`
-    * [ ] Check `class` no child
-    * [ ] Check `class` not `NSObject`
-    * [ ] Exceptions
-        * [ ] @MainActor var
-        * [ ] nonisolated(unsafe) var
+    * [x] Commom
+        * [x] Check all propery is `let`
+        * [x] Check all propery is `Sendable`
+        * [x] Exceptions
+            * [x] @MainActor var
+            * [x] nonisolated(unsafe) var
+    * [x] Add `Sendable` to `struct`
+    * [x] Add `Sendable` to `class`
+        * [x] Add `final` to `class`
+        * [x] `open class` can't `final`
+        * [x] Check `class` no child
+        * [x] Check `class` not `NSObject`
     * [ ] Add `Sendable` to `enum`
 * [ ] Add `@MainActor`
 * [ ] `sending`?

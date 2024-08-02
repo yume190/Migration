@@ -10,19 +10,29 @@ import SwiftSyntax
 import SKClient
 
 extension MigrationRewriter {
-    func typeusr<Syntax: SyntaxProtocol>(_ syntax: Syntax) throws -> String {
+    func typeusr<Syntax: SyntaxProtocol>(_ syntax: Syntax) -> String {
+        let usr = (try? client(syntax).typeusr) ?? ""
+        if (usr.starts(with: "c:")) {
+            return usr
+        }
 #if DEBUG
-        return try USR(client(syntax).typeusr?.removeSuffix("D"))?.toIndexStoreDB().usr ?? ""
+        let inputUsr = usr.removeSuffix("D")
 #else
-        return try USR(client(syntax).typeusr)?.toIndexStoreDB().usr ?? ""
+        let inputUsr = usr
 #endif
+        return USR(inputUsr)?.toIndexStoreDB().usr ?? ""
     }
     
-    func usr<Syntax: SyntaxProtocol>(_ syntax: Syntax) throws -> String {
+    func usr<Syntax: SyntaxProtocol>(_ syntax: Syntax) -> String {
+        let usr = (try? client(syntax).usr) ?? ""
+        if (usr.starts(with: "c:")) {
+            return usr
+        }
 #if DEBUG
-        return try USR(client(syntax).usr?.removeSuffix("D"))?.toIndexStoreDB().usr ?? ""
+        let inputUsr = usr.removeSuffix("D")
 #else
-        return try USR(client(syntax).usr)?.toIndexStoreDB().usr ?? ""
+        let inputUsr = usr
 #endif
+        return USR(inputUsr)?.toIndexStoreDB().usr ?? ""
     }
 }
