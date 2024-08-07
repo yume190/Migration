@@ -25,7 +25,33 @@ build:
 .PHONY: test
 test: build
 	# @swift test -v 2>&1 | xcpretty
-	@swift test -v 2>&1 | xcbeautify
+	@swift test \
+		-j 1 \
+		-v 2>&1 | xcbeautify
+
+.PHONY: test2
+test2: build
+	@swift test -v --filter SyntaxTests 2>&1 | xcbeautify
+
+	@swift test -v --filter SendableTests/testSimple 2>&1 | xcbeautify
+	@swift test -v --filter SendableTests/testWithException 2>&1 | xcbeautify
+	@swift test -v --filter SendableTests/testExistSendable 2>&1 | xcbeautify
+	@swift test -v --filter SendableTests/testWithMultiInheritance 2>&1 | xcbeautify
+	@swift test -v --filter SendableTests/testStep1 2>&1 | xcbeautify
+	@swift test -v --filter SendableTests/testStep2 2>&1 | xcbeautify
+	@swift test -v --filter SendableTests/testStep3 2>&1 | xcbeautify
+	@swift test -v --filter SendableTests/testClass 2>&1 | xcbeautify
+	@swift test -v --filter SendableTests/testClassNSObject 2>&1 | xcbeautify
+	@swift test -v --filter SendableTests/testClassOnlyNoChildClass 2>&1 | xcbeautify
+	
+	@swift test -v --filter IndexDBTests/testExtensions2 2>&1 | xcbeautify
+	@swift test -v --filter IndexDBTests/testExtensions3 2>&1 | xcbeautify
+	@swift test -v --filter IndexDBTests/testComforms 2>&1 | xcbeautify
+	@swift test -v --filter IndexDBTests/testComformsInt 2>&1 | xcbeautify
+	@swift test -v --filter IndexDBTests/testProperty 2>&1 | xcbeautify
+	@swift test -v --filter IndexDBTests/testParent 2>&1 | xcbeautify
+	@swift test -v --filter IndexDBTests/testHasChild 2>&1 | xcbeautify
+	@swift test -v --filter IndexDBTests/testNSObject 2>&1 | xcbeautify
 
 .PHONY: release
 release:

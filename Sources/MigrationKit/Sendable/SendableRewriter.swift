@@ -9,7 +9,7 @@ import Foundation
 import SwiftSyntax
 import SKClient
 
-public final class MigrationRewriter: SyntaxRewriter {
+public final class SendableRewriter: SyntaxRewriter {
     let store: IndexStore
     let client: SKClient
     public init(store: IndexStore, client: SKClient) {
@@ -24,5 +24,4 @@ public final class MigrationRewriter: SyntaxRewriter {
     override public func visit(_ node: StructDeclSyntax) -> DeclSyntax {
         return .init(handleExplicitSendable(node))
     }
-    
 }

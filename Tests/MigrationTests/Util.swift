@@ -7,24 +7,61 @@
 
 import Foundation
 import SKClient
+import SwiftCommand
+import SKClient
+import PathKit
+import SwiftParser
+import SwiftSyntax
+import IndexStoreDB
+@testable import MigrationKit
 
-private let sourceFile: URL = URL(fileURLWithPath: #file)
-    .deletingLastPathComponent()
-    .appendingPathComponent("Resource")
+enum Commands {
+    static let swiftc = Command.findInPath(withName: "swiftc")
+    static let xcrun = Command.findInPath(withName: "xcrun")
 
-func resource(file: String) -> String {
-    return sourceFile.appendingPathComponent(file).path
 }
 
-@inline(__always)
-func prepare(code: String, action: (SKClient) throws -> ()) throws {
-    let client = SKClient(code: code)
-    try prepare(client: client, action: action)
+struct Tool: SyntaxTool {
+    let store: IndexStore
+    let client: SKClient
 }
 
-@inline(__always)
-func prepare(client: SKClient, action: (SKClient) throws -> ()) throws {
-    _ = try client.editorOpen()
-    try action(client)
-    _ = try client.editorClose()
+let pwd = #file
+let root = Path(pwd).parent().parent().parent()
+let fixture = root + "TestFixture"
+
+func prepare(preFolder: String, folder: String, code: String) throws -> Tool? {
+    let dir = fixture + preFolder + folder.removeSuffix("()")
+    let file = dir + "Temp.swift"
+    let object = dir + "Temp.o"
+    let indexDdDir = dir + "Index"
+    try dir.mkpath()
+    try file.write(code, encoding: .utf8)
+    
+    _ = try Commands.swiftc?.addArguments([
+        file.string,
+        "-o", object.string,
+        "-index-store-path", indexDdDir.string,
+    ]).waitForOutput()
+    
+    
+    let client = try SKClient(path: file.string, sdk: .macosx)
+    guard let store = IndexStore(path: indexDdDir.string) else {
+        return nil
+    }
+    
+    return Tool(store: store, client: client)
+}
+
+
+func addSendable(preFolder: String, folder: String, code: String) throws -> String? {
+    guard let tool = try prepare(preFolder: preFolder, folder: folder, code: code) else {
+        return nil
+    }
+    let source = Parser.parse(source: code)
+    let rewriter = SendableRewriter(store: tool.store, client: tool.client)
+    let modified = rewriter.visit(source)
+    var result: String = ""
+    modified.write(to: &result)
+    return result
 }

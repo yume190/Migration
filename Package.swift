@@ -29,7 +29,6 @@ let package = Package(
             url: "https://github.com/yume190/TypeFill",
             from: "0.5.0"
         ),
-//        .package(path: "../TypeFill"),
 
         .package(url: "https://github.com/jpsim/SourceKitten", from: "0.35.0"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.2"),
@@ -37,8 +36,7 @@ let package = Package(
         .package(url: "https://github.com/zonble/HumanString.git", from: "0.1.1"),
         .package(url: "https://github.com/kylef/PathKit", from: "1.0.1"),
         .package(url: "https://github.com/jpsim/Yams", from: "5.0.5"),
-        
-        
+        .package(url: "https://github.com/Zollerboy1/SwiftCommand", from: "1.4.0"),
     ],
     targets: [
         .executableTarget(
@@ -61,8 +59,9 @@ let package = Package(
                 "Rainbow",
                 "PathKit",
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
-                .product(name: "SwiftParser", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+                .product(name: "SwiftParser", package: "swift-syntax"),
+                
                 
                 .product(name: "IndexStoreDB", package: "indexstore-db"),
                 .product(name: "SKClient", package: "TypeFill"),
@@ -75,8 +74,11 @@ let package = Package(
             name: "MigrationTests",
             dependencies: [
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
                 .product(name: "SKClient", package: "TypeFill"),
+                .product(name: "SwiftCommand", package: "SwiftCommand"),
+                
                 "MigrationKit",
                 "HumanString",
             ]

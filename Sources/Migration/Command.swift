@@ -131,12 +131,44 @@ struct Command: AsyncParsableCommand {
         }
         
         
+//        for file in module.sourceFiles {
+//            let client = try SKClient(path: file, arguments: module.compilerArguments)
+//            let path = Path(file)
+//            let code = try path.read(.utf8)
+//            let root = Parser.parse(source: code)
+//            let rewriter = MigrationRewriter(store: indexDB, client: client)
+//            let modified = rewriter.visit(root)
+//
+//            var result: String = ""
+//            modified.write(to: &result)
+//
+//            let url: URL = URL(fileURLWithPath: file)
+//            let fileHandle = try FileHandle(forWritingTo: url)
+//            
+//            fileHandle.write(Data(result.utf8))
+//        }
+        let client = try SKClient(path: module.sourceFiles.first!, arguments: module.compilerArguments)
+        let logic = MainActorLogic(store: indexDB, client: client)
         for file in module.sourceFiles {
             let client = try SKClient(path: file, arguments: module.compilerArguments)
             let path = Path(file)
             let code = try path.read(.utf8)
             let root = Parser.parse(source: code)
-            let rewriter = MigrationRewriter(store: indexDB, client: client)
+            let visitor = MainActorVisitor(store: indexDB, client: client)
+            visitor.walk(root)
+
+            logic.append(usrs: visitor.usrs)
+        }
+        logic.process()
+        
+        print(logic.fixs)
+        
+        for file in module.sourceFiles {
+            let client = try SKClient(path: file, arguments: module.compilerArguments)
+            let path = Path(file)
+            let code = try path.read(.utf8)
+            let root = Parser.parse(source: code)
+            let rewriter = MainActorRewriter(store: indexDB, client: client, logic: logic)
             let modified = rewriter.visit(root)
 
             var result: String = ""
@@ -144,9 +176,8 @@ struct Command: AsyncParsableCommand {
 
             let url: URL = URL(fileURLWithPath: file)
             let fileHandle = try FileHandle(forWritingTo: url)
-            
-            fileHandle.write(Data(result.utf8))
 
+            fileHandle.write(Data(result.utf8))
         }
     }
 }
