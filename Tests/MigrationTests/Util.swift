@@ -65,3 +65,23 @@ func addSendable(preFolder: String, folder: String, code: String) throws -> Stri
     modified.write(to: &result)
     return result
 }
+
+
+func addMainActor(preFolder: String, folder: String, code: String) throws -> String? {
+    guard let tool = try prepare(preFolder: preFolder, folder: folder, code: code) else {
+        return nil
+    }
+    let source = Parser.parse(source: code)
+    let logic = MainActorLogic(store: tool.store, client: tool.client)
+    let visitor = MainActorVisitor(store: tool.store, client: tool.client)
+    visitor.walk(source)
+    
+    logic.append(usrs: visitor.usrs)
+    logic.process()
+    
+    let rewriter = MainActorRewriter(store: tool.store, client: tool.client, logic: logic)
+    let modified = rewriter.visit(source)
+    var result: String = ""
+    modified.write(to: &result)
+    return result
+}

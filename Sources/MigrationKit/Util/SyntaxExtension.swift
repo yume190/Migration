@@ -29,7 +29,7 @@ extension SyntaxExtension {
             }
         }
             .with(\.leadingTrivia, leadingTrivia)
-            .with(\.trailingTrivia, .space)
+            .with(\.trailingTrivia, [])
         return self
             .with(\.leadingTrivia, .space)
             .with(\.attributes, attributes)
@@ -45,7 +45,7 @@ extension SyntaxExtension {
             }
         }
             .with(\.leadingTrivia, leadingTrivia)
-            .with(\.trailingTrivia, .space)
+            .with(\.trailingTrivia, [])
         return self
             .with(\.leadingTrivia, .space)
             .with(\.modifiers, modifiers)

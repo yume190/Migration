@@ -4,7 +4,7 @@
 
 [Swift Migration Guide](https://github.com/apple/swift-migration-guide)
 
-## 安裝
+## Install
 
 ``` bash
 brew install mint
@@ -48,11 +48,16 @@ migration \
     * [x] Add `Sendable` to `struct`
     * [x] Add `Sendable` to `class`
         * [x] Add `final` to `class`
-        * [x] `open class` can't `final`
-        * [x] Check `class` no child
+            * [x] `open class` can't `final`
+            * [x] Check `class` no child class
         * [x] Check `class` not `NSObject`
     * [ ] Add `Sendable` to `enum`
 * [ ] Add `@MainActor`
+    * [ ] find caller
+    * [ ] find exist `@MainActor` structure
+    * [ ] find exist `@MainActor` instance property
+    * [ ] find use `@MainActor` instance property
+    * [ ] find use `@MainActor` call function
 * [ ] `sending`?
 * [ ] `@retroactive`?
 

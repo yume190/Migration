@@ -42,6 +42,29 @@ final class SendableTests: XCTestCase {
         XCTAssertEqual(modifiedCode, expectCode)
     }
     
+    final func testWithNSObjectProperty() throws {
+        guard let modifiedCode = try addSendable(preFolder: preFolder, folder: #function, code:
+        """
+        import Foundation
+        struct Target {
+            let a: Int
+            let b: NSObject
+        }
+        """) else {
+            return
+        }
+        
+        let expectCode = """
+        import Foundation
+        struct Target {
+            let a: Int
+            let b: NSObject
+        }
+        """
+        
+        XCTAssertEqual(modifiedCode, expectCode)
+    }
+    
     final func testWithException() throws {
         guard let modifiedCode = try addSendable(preFolder: preFolder, folder: #function, code:
         """
@@ -211,7 +234,6 @@ final class SendableTests: XCTestCase {
         }
     }
     
-    #warning("Syntax Trivia")
     final func testClass() throws {
         guard let modifiedCode = try addSendable(preFolder: preFolder, folder: #function, code:
         """
@@ -226,7 +248,7 @@ final class SendableTests: XCTestCase {
         }
         
         let expectCode = """
-        final  class Target : Sendable {
+        final class Target : Sendable {
             let a: Int
             init(a: Int) {
                 self.a = a
@@ -258,7 +280,6 @@ final class SendableTests: XCTestCase {
         XCTAssertEqual(modifiedCode, expectCode)
     }
     
-    #warning("Syntax Trivia")
     final func testClassOnlyNoChildClass() throws {
         guard let modifiedCode = try addSendable(preFolder: preFolder, folder: #function, code:
         """
@@ -272,7 +293,7 @@ final class SendableTests: XCTestCase {
         let expectCode = """
         class C1 {}
         class C2: C1 {}
-        final  class C3: C2, Sendable {}
+        final class C3: C2, Sendable {}
         """
         
         XCTAssertEqual(modifiedCode, expectCode)
