@@ -134,7 +134,7 @@ struct Command: AsyncParsableCommand {
             let path = Path(file)
             let code = try path.read(.utf8)
             let root = Parser.parse(source: code)
-            let rewriter = MigrationRewriter(store: indexDB, client: client)
+            let rewriter = SendableRewriter(store: indexDB, client: client)
             let modified = rewriter.visit(root)
 
             var result: String = ""

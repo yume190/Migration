@@ -24,7 +24,7 @@ build:
 # --parallel
 .PHONY: test
 test: build
-	@swift test -v 2>&1 | xcpretty
+	@swift test -v 2>&1 | xcbeautify
 
 .PHONY: release
 release:
