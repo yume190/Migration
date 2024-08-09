@@ -4,6 +4,7 @@
 
 [Swift Migration Guide](https://github.com/apple/swift-migration-guide)
 
+> [!CAUTION]
 > Don't use `XCode 15.4` or must test UsrTests/testUsr success first
 
 Currently, only `Add Explicit Sendable` is allowed.
