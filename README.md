@@ -4,6 +4,10 @@
 
 [Swift Migration Guide](https://github.com/apple/swift-migration-guide)
 
+> Don't use `XCode 15.4` or must test UsrTests/testUsr success
+
+---
+
 ## Install
 
 ``` bash
@@ -34,7 +38,6 @@ migration \
 ```
 
 ---
-
 
 ## TODOS
 
