@@ -4,7 +4,11 @@
 
 [Swift Migration Guide](https://github.com/apple/swift-migration-guide)
 
-> Don't use `XCode 15.4` or must test UsrTests/testUsr success
+> Don't use `XCode 15.4` or must test UsrTests/testUsr success first
+
+Currently, only `Add Explicit Sendable` is allowed.
+
+[Sendable](Sendable.md), [Sendable 中文](Sendable_TW.md)
 
 ---
 
@@ -15,7 +19,7 @@ brew install mint
 mint install yume190/Migration
 ```
 
-## 使用方式
+## Usage
 
 ``` bash
 migration \
