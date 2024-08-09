@@ -35,7 +35,8 @@ public struct IndexStore {
     do {
       try self.db = IndexStoreDB(
         storePath: path,
-        databasePath: NSTemporaryDirectory() + "index_\(getpid())",
+//        databasePath: NSTemporaryDirectory() + "index_\(getpid())",
+        databasePath: NSTemporaryDirectory() + "\(UUID())",
         library: IndexStoreLibrary(dylibPath: libPath)
       )
       db.pollForUnitChangesAndWait()

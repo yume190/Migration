@@ -30,4 +30,4 @@ jobs:
       run: swift build -v
 
     - name: Run tests
-      run: make test2
+      run: make test
