@@ -24,4 +24,8 @@ public final class SendableRewriter: SyntaxRewriter {
     override public func visit(_ node: StructDeclSyntax) -> DeclSyntax {
         return .init(handleExplicitSendable(node))
     }
+    
+    override public func visit(_ node: EnumDeclSyntax) -> DeclSyntax {
+        return .init(handleExplicitSendable(node))
+    }
 }

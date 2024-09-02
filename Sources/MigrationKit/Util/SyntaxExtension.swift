@@ -80,6 +80,14 @@ extension SyntaxExtension {
         }
     }
     
+    /// @globalActor
+    func hasGlobalActor(_ globalActors: Set<String>) -> Bool {
+        let allActors = globalActors.union([Symbols.mainActor.description])
+        return attributes.contains { attr in
+            allActors.contains(attr.withoutTrivia.description)
+        }
+    }
+    
     /// final
     var hasFinal: Bool {
         return modifiers.contains { modifier in
@@ -99,16 +107,29 @@ extension SyntaxExtension where Self == VariableDeclSyntax {
     /// nonisolated(unsafe)
     var hasNonisolated: Bool {
         return modifiers.contains { syntax in
-            syntax.withoutTrivia.name.text == Symbols.nonisolated.name.text
-        } && self.unexpectedBetweenModifiersAndBindingSpecifier?.withoutTrivia.description == "(unsafe)"
+            return
+                syntax.withoutTrivia.name.text == Symbols.nonisolated.name.text &&
+                syntax.detail?.detail.identifier?.name == "unsafe"
+        }
     }
 }
 
+extension SyntaxExtension where Self == ActorDeclSyntax {
+    /// @globalActor
+    var isGlobalActor: Bool {
+        return attributes.contains { attr in
+            attr.withoutTrivia.description == Symbols.globalActor.description
+        }
+    }
+}
+
+extension ActorDeclSyntax: SyntaxExtension {}
 extension VariableDeclSyntax: SyntaxExtension {}
 extension FunctionDeclSyntax: SyntaxExtension {}
 extension InitializerDeclSyntax: SyntaxExtension {}
 extension SubscriptDeclSyntax: SyntaxExtension {}
 
 
+extension EnumDeclSyntax: StructureSyntaxExtension {}
 extension StructDeclSyntax: StructureSyntaxExtension {}
 extension ClassDeclSyntax: StructureSyntaxExtension {}

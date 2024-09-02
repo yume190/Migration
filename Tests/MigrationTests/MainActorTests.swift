@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Tangram Yume on 2024/8/7.
-//
-
 import Foundation
 import XCTest
 import SwiftSyntax
@@ -84,7 +77,7 @@ final class MainActorTests: XCTestCase {
             print(c.a)
         }
         
-        func test2() {
+        @MainActor func test2() {
             let c = C(a: 1)
             print(c)
         }

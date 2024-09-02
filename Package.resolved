@@ -10,21 +10,12 @@
       }
     },
     {
-      "identity" : "humanstring",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zonble/HumanString.git",
-      "state" : {
-        "revision" : "5939265f3ba37e793ee654b0af38368b8c871a3c",
-        "version" : "0.1.1"
-      }
-    },
-    {
       "identity" : "indexstore-db",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/indexstore-db",
       "state" : {
-        "branch" : "swift-5.9.2-RELEASE",
-        "revision" : "89ec16c2ac1bb271614e734a2ee792224809eb20"
+        "branch" : "release/6.0",
+        "revision" : "f4d7f08f6a078050d86aed10a06bf1fc871a8ded"
       }
     },
     {
@@ -95,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-syntax.git",
       "state" : {
-        "revision" : "43c802fb7f96e090dde015344a94b5e85779eff1",
-        "version" : "509.1.0"
+        "branch" : "release/6.0",
+        "revision" : "515f79b522918f83483068d99c68daeb5116342d"
       }
     },
     {
@@ -138,10 +129,10 @@
     {
       "identity" : "yams",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jpsim/Yams.git",
+      "location" : "https://github.com/jpsim/Yams",
       "state" : {
-        "revision" : "0d9ee7ea8c4ebd4a489ad7a73d5c6cad55d6fed3",
-        "version" : "5.0.6"
+        "revision" : "3036ba9d69cf1fd04d433527bc339dc0dc75433d",
+        "version" : "5.1.3"
       }
     }
   ],

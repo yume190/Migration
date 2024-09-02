@@ -18,7 +18,6 @@ import IndexStoreDB
 enum Commands {
     static let swiftc = Command.findInPath(withName: "swiftc")
     static let xcrun = Command.findInPath(withName: "xcrun")
-
 }
 
 struct Tool: SyntaxTool {
@@ -29,6 +28,13 @@ struct Tool: SyntaxTool {
 let pwd = #file
 let root = Path(pwd).parent().parent().parent()
 let fixture = root + "TestFixture"
+
+func cleanUp(_ preFolder: String, _ folder: String) throws {
+    let dir = fixture + preFolder + folder.removeSuffix("()")
+    if dir.exists && dir.isDirectory {
+        try dir.delete()
+    }
+}
 
 func prepare(preFolder: String, folder: String, code: String) throws -> Tool? {
     let dir = fixture + preFolder + folder.removeSuffix("()")

@@ -17,6 +17,7 @@ protocol SyntaxTool {
 extension MainActorVisitor: SyntaxTool {}
 extension MainActorRewriter: SyntaxTool {}
 extension SendableRewriter: SyntaxTool {}
+extension EnumParameterVisitor: SyntaxTool {}
 
 
 extension SyntaxTool {

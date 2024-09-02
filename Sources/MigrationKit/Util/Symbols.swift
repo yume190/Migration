@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Tangram Yume on 2024/8/2.
-//
-
 import SwiftSyntax
 
 extension SyntaxProtocol {
@@ -44,6 +37,13 @@ enum Symbols {
     static var mainActor: AttributeSyntax {
         return AttributeSyntax(
             attributeName: TypeSyntax(IdentifierTypeSyntax(name: TokenSyntax.identifier("MainActor")))
+        )
+    }
+    
+    /// @globalActor
+    static var globalActor: AttributeSyntax {
+        return AttributeSyntax(
+            attributeName: TypeSyntax(IdentifierTypeSyntax(name: TokenSyntax.identifier("globalActor")))
         )
     }
 }

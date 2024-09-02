@@ -31,12 +31,12 @@ public struct IndexStore {
       .appendingPathComponent("lib/libIndexStore.dylib")
     
     let libPath: String = indexStoreLibPath.path
-    
+    let databasePath = NSTemporaryDirectory() + "\(UUID())"
     do {
       try self.db = IndexStoreDB(
         storePath: path,
 //        databasePath: NSTemporaryDirectory() + "index_\(getpid())",
-        databasePath: NSTemporaryDirectory() + "\(UUID())",
+        databasePath: databasePath,
         library: IndexStoreLibrary(dylibPath: libPath)
       )
       db.pollForUnitChangesAndWait()

@@ -17,12 +17,13 @@ let package = Package(
         
         .package(
             url: "https://github.com/apple/swift-syntax.git",
-            from: "509.1.0"
+            branch: "release/6.0"
+//            revision: "600.0.0-latest"
         ),
         
         .package(
             url: "https://github.com/apple/indexstore-db",
-            revision: "swift-5.9.2-RELEASE"
+            branch: "release/6.0"
         ),
 
         .package(
@@ -33,9 +34,8 @@ let package = Package(
         .package(url: "https://github.com/jpsim/SourceKitten", from: "0.35.0"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.2"),
         .package(url: "https://github.com/onevcat/Rainbow", from: "4.0.1"),
-        .package(url: "https://github.com/zonble/HumanString.git", from: "0.1.1"),
         .package(url: "https://github.com/kylef/PathKit", from: "1.0.1"),
-        .package(url: "https://github.com/jpsim/Yams", from: "5.0.5"),
+        .package(url: "https://github.com/jpsim/Yams", from: "5.1.3"),
         .package(url: "https://github.com/Zollerboy1/SwiftCommand", from: "1.4.0"),
     ],
     targets: [
@@ -51,7 +51,7 @@ let package = Package(
             ]
         ),
 
-        // MARK: Frameworks
+        // MARK: - Frameworks
 
         .target(
             name: "MigrationKit",
@@ -80,7 +80,6 @@ let package = Package(
                 .product(name: "SwiftCommand", package: "SwiftCommand"),
                 
                 "MigrationKit",
-                "HumanString",
             ]
         ),
     ]

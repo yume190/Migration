@@ -67,4 +67,33 @@ extension SendableRewriter {
         
         return node
     }
+    
+    final func handleExplicitSendable(_ node: EnumDeclSyntax) -> EnumDeclSyntax {
+        let visitor = EnumParameterVisitor(store: store, client: client)
+        visitor.walk(node)
+        if visitor.isSendable {
+            return node.addSendable()
+        }
+        
+        return node
+    }
+}
+
+final class EnumParameterVisitor: SyntaxVisitor {
+    let store: IndexStore
+    let client: SKClient
+    var isSendable = true
+    public init(store: IndexStore, client: SKClient) {
+        self.store = store
+        self.client = client
+        super.init(viewMode: .sourceAccurate)
+    }
+    
+    override func visit(_ node: EnumCaseParameterSyntax) -> SyntaxVisitorContinueKind {
+        /// early skip
+        guard isSendable else { return .skipChildren }
+        
+        isSendable = isSendable && store.isSendable(usr(node.type))
+        return .skipChildren
+    }
 }
