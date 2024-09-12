@@ -6,6 +6,11 @@ extension SyntaxProtocol {
             .with(\.leadingTrivia, [])
             .with(\.trailingTrivia, [])
     }
+    var withNewline: Self {
+        return self
+            .with(\.leadingTrivia, .newline)
+            .with(\.trailingTrivia, .newline)
+    }
 }
 
 enum Symbols {
